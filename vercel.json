@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "crons": [
+    { "path": "/api/cron/weekly?run=bst", "schedule": "5 19 * * 0" },
+    { "path": "/api/cron/weekly?run=gmt", "schedule": "5 20 * * 0" },
+    { "path": "/api/cron/weekly?run=monday", "schedule": "0 8 * * 1" }
+  ]
+}
