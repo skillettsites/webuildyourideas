@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { NewsletterForm } from "./NewsletterForm";
 import { LogoMark } from "./Logo";
+import { TIKTOK_URL } from "@/lib/config";
 
 const COLS = [
   {
@@ -25,6 +26,7 @@ const COLS = [
     title: "About",
     links: [
       { href: "/contact", label: "Contact" },
+      ...(TIKTOK_URL ? [{ href: TIKTOK_URL, label: "TikTok" }] : []),
       { href: "/privacy", label: "Privacy" },
       { href: "/terms", label: "Terms" },
     ],

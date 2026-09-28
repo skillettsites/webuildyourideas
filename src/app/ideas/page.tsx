@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function IdeasPage() {
   const [{ end, ideas }, winners] = await Promise.all([getCurrentRoundIdeas(20), getWinners()]);
   const round = roundNumber(end);
-  const votes = ideas.reduce((n, i) => n + i.vote_count, 0);
+  const votes = ideas.reduce((n, i) => n + i.score, 0);
   const last = winners[0];
 
   return (

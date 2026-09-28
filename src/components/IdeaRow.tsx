@@ -2,6 +2,7 @@ import Link from "next/link";
 import { categoryLabel } from "@/lib/config";
 import { timeAgo } from "@/lib/rounds";
 import { VoteButton } from "./VoteButton";
+import { sameText } from "@/lib/tiktok";
 
 export type IdeaRowData = {
   id: string;
@@ -13,6 +14,9 @@ export type IdeaRowData = {
   vote_count: number;
   status: string;
   created_at: string;
+  source?: string;
+  tiktok_likes?: number;
+  tiktok_handle?: string | null;
 };
 
 export function StatusPill({ status }: { status: string }) {
@@ -40,11 +44,19 @@ export function IdeaRow({ idea, rank, closed = false, now }: { idea: IdeaRowData
           </h3>
           <StatusPill status={idea.status} />
         </div>
-        <p className="mt-1.5 line-clamp-2 text-[15px] leading-relaxed text-mute">{idea.description}</p>
+        {!sameText(idea.title, idea.description) && <p className="mt-1.5 line-clamp-2 text-[15px] leading-relaxed text-mute">{idea.description}</p>}
         <p className="mt-2.5 text-[13px] text-mute-2">
           <span className="font-medium text-ink-2">{categoryLabel(idea.category)}</span>
           <span className="mx-1.5">·</span>
-          {idea.author_name ? `by ${idea.author_name}` : "Anonymous"}
+          {idea.source === "tiktok" ? (
+            <>
+              <span className="font-medium text-[#ee1d52]">TikTok</span> @{idea.tiktok_handle || "someone"} · {idea.tiktok_likes ?? 0} likes
+            </>
+          ) : idea.author_name ? (
+            `by ${idea.author_name}`
+          ) : (
+            "Anonymous"
+          )}
           <span className="mx-1.5">·</span>
           <time dateTime={idea.created_at} suppressHydrationWarning>
             {timeAgo(idea.created_at, now)}
@@ -52,7 +64,7 @@ export function IdeaRow({ idea, rank, closed = false, now }: { idea: IdeaRowData
         </p>
       </div>
       <div className="relative z-[1] shrink-0 self-center">
-        <VoteButton ideaId={idea.id} count={idea.vote_count} closed={closed || idea.status !== "open"} title={idea.title} />
+        <VoteButton ideaId={idea.id} count={idea.vote_count} bonus={idea.tiktok_likes ?? 0} closed={closed || idea.status !== "open"} title={idea.title} />
       </div>
     </article>
   );

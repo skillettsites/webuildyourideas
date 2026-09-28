@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
-import { categoryLabel } from "@/lib/config";
+import { CATEGORIES, categoryLabel } from "@/lib/config";
 import { formatLondon, roundNumber } from "@/lib/rounds";
 import { ADMIN_COOKIE, adminConfigured, isAdminSession } from "@/lib/security";
 import { sbRpc } from "@/lib/supabase";
@@ -23,6 +23,11 @@ type AdminIdea = {
   built_summary: string | null;
   created_at: string;
   email: string | null;
+  source: string;
+  tiktok_likes: number;
+  tiktok_handle: string | null;
+  tiktok_url: string | null;
+  score: number;
 };
 
 type Overview = {
@@ -36,9 +41,9 @@ type Overview = {
 
 const when = (s: string) => formatLondon(s, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 
-export default async function AdminPage({ searchParams }: { searchParams: Promise<{ e?: string }> }) {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ e?: string; tt?: string }> }) {
   const authed = isAdminSession((await cookies()).get(ADMIN_COOKIE)?.value);
-  const { e } = await searchParams;
+  const { e, tt } = await searchParams;
 
   if (!authed) {
     return (
@@ -89,6 +94,29 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             </div>
           ))}
         </div>
+
+        <h2 id="tiktok" className="title mt-12">
+          Add TikTok comments
+        </h2>
+        <form action="/api/admin/tiktok" method="post" className="mt-4 space-y-3 rounded-[18px] bg-white p-5">
+          <p className="text-[14px] text-mute">
+            Paste the top comments from a video, one per line, as <code className="rounded bg-cloud px-1">likes, @handle, comment</code> (tabs or | also work, and
+            1.2K is fine). Each becomes an idea on this week’s board, and its TikTok likes count as votes.
+          </p>
+          {tt && <p className="rounded-xl bg-green-soft px-3 py-2 text-[14px] text-ink">{tt}</p>}
+          <textarea name="lines" required className="field min-h-[140px] !text-[14px] font-mono" placeholder={"1.2K, @sarah.makes, an app that tells you when the chippy is actually open\n340, @tomw, a website to swap plants with neighbours"} />
+          <div className="grid gap-3 sm:grid-cols-[1fr_200px_auto]">
+            <input name="url" className="field !py-2 !text-[14px]" placeholder="TikTok video link (optional)" />
+            <select name="category" className="field !py-2 !text-[14px]" defaultValue="other">
+              {CATEGORIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+            <button className="btn btn-primary btn-sm">Add to this week</button>
+          </div>
+        </form>
 
         <h2 id="requests" className="title mt-12">
           Requests and messages
@@ -141,12 +169,23 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       {i.title}
                     </Link>{" "}
                     <span className="font-normal text-mute">
-                      · {i.vote_count} votes · Round {roundNumber(i.round_end)} · {i.status}
+                      · {i.source === "tiktok" ? `${i.vote_count} votes + ${i.tiktok_likes} TikTok likes = ${i.score}` : `${i.vote_count} votes`} · Round{" "}
+                      {roundNumber(i.round_end)} · {i.status}
                     </span>
                   </p>
                   <p className="mt-1 line-clamp-2 text-[14px] text-mute">{i.description}</p>
                   <p className="mt-1 text-[13px] text-mute-2">
-                    {categoryLabel(i.category)} · {i.author_name || "Anonymous"} · {i.email} · {when(i.created_at)}
+                    {categoryLabel(i.category)} · {i.source === "tiktok" ? `TikTok @${i.tiktok_handle}` : `${i.author_name || "Anonymous"} · ${i.email}`} ·{" "}
+                    {when(i.created_at)}
+                    {i.tiktok_url && (
+                      <>
+                        {" "}
+                        ·{" "}
+                        <a href={i.tiktok_url} target="_blank" rel="noopener" className="text-link">
+                          video
+                        </a>
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -167,6 +206,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     ))}
                 </div>
               </div>
+              {i.source === "tiktok" && i.status === "open" && (
+                <form action="/api/admin/tiktok-likes" method="post" className="mt-3 flex gap-2">
+                  <input type="hidden" name="id" value={i.id} />
+                  <input type="hidden" name="slug" value={i.slug} />
+                  <input name="likes" defaultValue={i.tiktok_likes} className="field !w-32 !py-2 !text-[14px]" aria-label="TikTok likes" />
+                  <button className="btn btn-secondary btn-sm">Update likes</button>
+                </form>
+              )}
               {["winner", "building", "built"].includes(i.status) && (
                 <form action="/api/admin/idea" method="post" className="mt-3 grid gap-2 sm:grid-cols-[1fr_1.5fr_auto]">
                   <input type="hidden" name="id" value={i.id} />

@@ -49,7 +49,7 @@ export async function GET(req: Request) {
           ? [
               `🏆 Round ${round} closed`,
               `Winner: ${r.winner_title} (${r.winner_votes} votes)`,
-              `By ${r.winner_name || "Anonymous"} · ${r.winner_email}`,
+              r.winner_email ? `By ${r.winner_name || "Anonymous"} · ${r.winner_email}` : `From TikTok: ${r.winner_name}. Message them on TikTok to plan the build.`,
               `${r.idea_count} ideas, ${r.vote_count} votes in total`,
               `Winner email: ${winnerEmail}`,
             ]
@@ -67,9 +67,9 @@ export async function GET(req: Request) {
       const stale = Date.now() - new Date(r.round_end).getTime() > 3 * 24 * 3600 * 1000;
       if (emailConfigured()) {
         const recipients = (await sbRpc<{ email: string; token: string }[]>("wbyi_digest_recipients", {})) ?? [];
-        const top = await sbSelect<{ title: string; slug: string; vote_count: number }>(
+        const top = await sbSelect<{ title: string; slug: string; score: number }>(
           "wbyi_ideas",
-          `select=title,slug,vote_count&round_end=eq.${encodeURIComponent(new Date(r.round_end).toISOString())}&order=vote_count.desc,created_at.asc&limit=5`,
+          `select=title,slug,score&round_end=eq.${encodeURIComponent(new Date(r.round_end).toISOString())}&status=in.(open,winner,building,built)&order=score.desc,created_at.asc&limit=5`,
         );
         let sent = 0;
         for (const rec of recipients.slice(0, 2000)) {
@@ -78,7 +78,7 @@ export async function GET(req: Request) {
             token: rec.token,
             round,
             winner: r.winner_slug && r.winner_title ? { title: r.winner_title, slug: r.winner_slug, votes: r.winner_votes ?? 0 } : null,
-            top: top.map((t) => ({ title: t.title, slug: t.slug, votes: t.vote_count })),
+            top: top.map((t) => ({ title: t.title, slug: t.slug, votes: t.score })),
           });
           if (res.sent) sent++;
           await new Promise((ok) => setTimeout(ok, 550)); // stay under Resend's rate limit

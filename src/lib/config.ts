@@ -1,6 +1,8 @@
 export const SITE_NAME = "We Build Your Ideas";
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://webuildyourideas.com").replace(/\/$/, "");
 export const CONTACT_EMAIL = "hello@webuildyourideas.com";
+// Set NEXT_PUBLIC_TIKTOK_URL once the account exists; TikTok links stay hidden until then.
+export const TIKTOK_URL = (process.env.NEXT_PUBLIC_TIKTOK_URL || "").trim();
 
 export const CATEGORIES = [
   { id: "website", label: "Website" },

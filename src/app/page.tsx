@@ -31,7 +31,7 @@ export default async function HomePage() {
   const round = roundNumber(end);
   const closes = formatRoundClose(end);
   const top = ideas.slice(0, 5);
-  const totalVotes = ideas.reduce((n, i) => n + i.vote_count, 0);
+  const totalVotes = ideas.reduce((n, i) => n + i.score, 0);
 
   return (
     <>
@@ -132,7 +132,7 @@ export default async function HomePage() {
             </h2>
           </div>
           <div className="mt-14 grid gap-5 md:grid-cols-3">
-            <StepTile n={1} title="Share it." text="Tell us your idea in a sentence or two. It’s free and takes about two minutes." delay={0}>
+            <StepTile n={1} title="Share it." text="Tell us your idea in a sentence or two, here or in the comments on our TikTok. It’s free and takes about two minutes." delay={0}>
               <div className="rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
                 <div className="text-[11px] font-semibold text-mute">Your idea</div>
                 <div className="mt-1.5 text-[14px] font-semibold text-ink">A map of free drinking water taps</div>

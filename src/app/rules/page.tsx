@@ -44,9 +44,17 @@ export default function RulesPage() {
         <li>We check votes for fraud and may remove any we believe are not genuine, or disqualify an idea that has benefited from them.</li>
       </ul>
 
-      <h2>5. Choosing the winner</h2>
+      <h2>5. Ideas from TikTok</h2>
+      <ul>
+        <li>We also take ideas from the comments on our TikTok videos. We add the most-liked comments to the board, credited to the commenter’s TikTok username, with a link to the video.</li>
+        <li>For those ideas, every like on the comment counts as one vote, added to any votes it gets here. We update like counts during the week and take a final count when voting closes.</li>
+        <li>If a TikTok idea wins, we contact the commenter on TikTok. The same rules and prize apply.</li>
+        <li>Likes bought, botted or gathered by any trick don’t count, and we may disqualify an idea that has used them.</li>
+      </ul>
+
+      <h2>6. Choosing the winner</h2>
       <p>
-        When voting closes, the idea with the most votes wins. If two ideas tie, the one shared first wins. An idea needs at least one vote to win.
+        When voting closes, the idea with the highest score wins. The score is its votes here plus, for ideas from TikTok, its TikTok likes. If two ideas tie, the one shared first wins. An idea needs a score of at least one to win.
         We may pass over an idea, and pick the next in line, if it:
       </p>
       <ul>
@@ -57,7 +65,7 @@ export default function RulesPage() {
       </ul>
       <p>We email the winner on Sunday evening and show the result on the site.</p>
 
-      <h2>6. What the winner gets</h2>
+      <h2>7. What the winner gets</h2>
       <ul>
         <li>A conversation with us to agree a focused first version of the idea.</li>
         <li>Design, build and launch of that first version on the web, free of charge.</li>
@@ -69,20 +77,20 @@ export default function RulesPage() {
         line instead.
       </p>
 
-      <h2>7. Using your idea</h2>
+      <h2>8. Using your idea</h2>
       <p>
         By sharing an idea you give us permission to show it on this site and to talk about it, and about any build, in our own marketing. Winning
         builds carry a small “Built by We Build Your Ideas” credit. Ideas themselves can’t be owned, and other people may have had the same idea, so
         sharing one doesn’t stop anyone else, including us, from working on something similar.
       </p>
 
-      <h2>8. Moderation</h2>
+      <h2>9. Moderation</h2>
       <p>
         We may edit a title for clarity, or hide or remove any idea that breaks these rules, without notice. If you think we’ve got something wrong,{" "}
         <Link href="/contact">get in touch</Link>.
       </p>
 
-      <h2>9. Changes</h2>
+      <h2>10. Changes</h2>
       <p>
         We may update these rules from time to time. Changes apply to rounds that start after the change is published. The version on this page is
         the one that applies.

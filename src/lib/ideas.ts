@@ -16,6 +16,11 @@ export type Idea = {
   built_summary: string | null;
   built_at: string | null;
   created_at: string;
+  source: "site" | "tiktok";
+  tiktok_likes: number;
+  tiktok_handle: string | null;
+  tiktok_url: string | null;
+  score: number;
 };
 
 export type Round = {
@@ -26,20 +31,22 @@ export type Round = {
   closed_at: string;
 };
 
-const COLS = "id,slug,title,description,category,author_name,round_end,status,vote_count,built_url,built_summary,built_at,created_at";
+const COLS =
+  "id,slug,title,description,category,author_name,round_end,status,vote_count,built_url,built_summary,built_at,created_at,source,tiktok_likes,tiktok_handle,tiktok_url,score";
 export const IDEAS_TAG = "ideas";
 
-function byVotes(a: Idea, b: Idea) {
-  return b.vote_count - a.vote_count || a.created_at.localeCompare(b.created_at);
+// Ranking uses score: site votes plus TikTok likes.
+function byScore(a: Idea, b: Idea) {
+  return b.score - a.score || a.created_at.localeCompare(b.created_at);
 }
 
 export async function getRoundIdeas(roundEnd: Date, revalidate = 30): Promise<Idea[]> {
   const rows = await sbSelect<Idea>(
     "wbyi_ideas",
-    `select=${COLS}&round_end=eq.${encodeURIComponent(roundEnd.toISOString())}&order=vote_count.desc,created_at.asc&limit=500`,
+    `select=${COLS}&round_end=eq.${encodeURIComponent(roundEnd.toISOString())}&order=score.desc,created_at.asc&limit=500`,
     { revalidate, tags: [IDEAS_TAG] },
   );
-  return rows.sort(byVotes);
+  return rows.sort(byScore);
 }
 
 export async function getCurrentRoundIdeas(revalidate = 30) {
@@ -74,7 +81,7 @@ export async function getClosedRounds(): Promise<Round[]> {
 export async function getIndexableIdeas(minVotes: number): Promise<Pick<Idea, "slug" | "created_at" | "built_at">[]> {
   return sbSelect<Pick<Idea, "slug" | "created_at" | "built_at">>(
     "wbyi_ideas",
-    `select=slug,created_at,built_at&or=(vote_count.gte.${minVotes},status.in.(winner,building,built))&order=created_at.desc&limit=5000`,
+    `select=slug,created_at,built_at&or=(score.gte.${minVotes},status.in.(winner,building,built))&order=created_at.desc&limit=5000`,
     { revalidate: 3600, tags: [IDEAS_TAG] },
   );
 }

@@ -23,18 +23,18 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <OgMark size={48} />
-            <div style={{ fontSize: 26, fontWeight: 700, color: "#1d1d1f", letterSpacing: -0.5 }}>We Build Your Ideas</div>
+            <div style={{ display: "flex", fontSize: 26, fontWeight: 700, color: "#1d1d1f", letterSpacing: -0.5 }}>We Build Your Ideas</div>
           </div>
           {idea && (
             <div style={{ display: "flex", fontSize: 24, fontWeight: 500, color: "#6e6e73" }}>
-              {categoryLabel(idea.category)} · Round {roundNumber(idea.round_end)}
+              {`${categoryLabel(idea.category)} · Round ${roundNumber(idea.round_end)}`}
             </div>
           )}
         </div>
         <div style={{ display: "flex", background: "#ffffff", borderRadius: 40, padding: "52px 56px", alignItems: "center", gap: 40 }}>
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-            <div style={{ fontSize: 24, fontWeight: 700, color: idea?.status === "open" || !idea ? "#0071e3" : "#b64400" }}>{status}</div>
-            <div style={{ marginTop: 14, fontSize, fontWeight: 700, color: "#1d1d1f", letterSpacing: -2.5, lineHeight: 1.05 }}>{title}</div>
+            <div style={{ display: "flex", fontSize: 24, fontWeight: 700, color: idea?.status === "open" || !idea ? "#0071e3" : "#b64400" }}>{status}</div>
+            <div style={{ display: "flex", marginTop: 14, fontSize, fontWeight: 700, color: "#1d1d1f", letterSpacing: -2.5, lineHeight: 1.05 }}>{title}</div>
           </div>
           {idea && (
             <div
@@ -53,7 +53,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               <svg width="48" height="48" viewBox="0 0 24 24">
                 <path d="m6 15 6-6 6 6" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <div style={{ fontSize: 56, fontWeight: 700, letterSpacing: -2 }}>{idea.vote_count}</div>
+              <div style={{ display: "flex", fontSize: 56, fontWeight: 700, letterSpacing: -2 }}>{String(idea.score)}</div>
             </div>
           )}
         </div>

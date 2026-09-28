@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 const VOTE_STEPS = [
   ["Share your idea", "Give it a short title and a few sentences: what it does, who it’s for and why it matters. Sharing is free and your email stays private."],
   ["Collect votes", "Your idea goes straight onto this week’s board. Anyone can vote, once per idea. Share your link with the people your idea would help."],
+  ["Or comment on TikTok", "Prefer TikTok? Comment your idea on one of our videos. The most-liked comments join the board, and every like counts as a vote."],
   ["Voting closes Sunday, 8pm", "The idea with the most votes wins, as long as it’s legal, safe and buildable. We email the winner that evening."],
   ["We plan it together", "We talk to the winner about who it’s for and the one thing it must do well, then agree a focused first version."],
   ["We build and launch it", "We design, build and launch it on the web, with the domain and hosting covered for the first year. Then it’s yours."],

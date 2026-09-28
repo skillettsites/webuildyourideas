@@ -28,6 +28,10 @@ export default function PrivacyPage() {
           are public. Your email is private and used to confirm your idea, tell you if you win, and send the weekly email if you ask for it.
         </li>
         <li>
+          <strong>Ideas from our TikTok comments:</strong> if we add your comment to the board, we show the comment, your public TikTok
+          username and its like count, with a link to the video. Ask us and we’ll take it down.
+        </li>
+        <li>
           <strong>When you vote:</strong> a random identifier stored in a cookie on your device, and a one-way scrambled (hashed) version of your IP
           address. We use these only to make sure each person votes once per idea and to spot fake votes. We can’t turn the hash back into your IP
           address.

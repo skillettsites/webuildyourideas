@@ -18,6 +18,10 @@ export const HOME_FAQS: FaqItem[] = [
     a: "Anything that can live on the web: a website, a web app, a handy tool, a directory, a booking page or a community. Big ideas are welcome too. We turn the winner into a focused first version we can launch quickly.",
   },
   {
+    q: "Can I share an idea on TikTok instead?",
+    a: "Yes. Comment your idea on one of our TikTok videos. We add the most-liked comments to the weekly board, credited to you, and every like on your comment counts as a vote.",
+  },
+  {
     q: "Can I vote for my own idea?",
     a: "Yes. Everyone gets one vote per idea, and you can vote for as many different ideas as you like. The best way to win is to share your idea with the people it would help.",
   },

@@ -11,7 +11,9 @@ export function GET() {
 ## The weekly build (free)
 - Share an idea: ${SITE_URL}/ideas/submit (free, up to three ideas per round, email kept private)
 - Vote: ${SITE_URL}/ideas (one vote per person per idea, fraud checked)
+- Ideas also come from comments on the We Build Your Ideas TikTok videos: the most-liked comments join the board and each TikTok like counts as one vote.
 - Voting closes every Sunday at 8pm UK time. Round 1 closes on Sunday 4 October 2026.
+- The idea with the highest score (votes on the site plus TikTok likes) wins.
 - The winner gets a focused first version designed, built and launched free, with a .com or .co.uk domain and hosting covered for the first year, and owns the finished site.
 - Rules: ${SITE_URL}/rules
 - Past rounds: ${SITE_URL}/ideas/past

@@ -8,18 +8,7 @@ export const contentType = "image/png";
 export default async function Image() {
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "#ffffff", fontFamily: "Inter", position: "relative", overflow: "hidden" }}>
-        <div
-          style={{
-            position: "absolute",
-            left: 260,
-            top: 250,
-            width: 900,
-            height: 560,
-            borderRadius: 9999,
-            background: "radial-gradient(closest-side, rgba(94,92,230,0.28), rgba(255,55,95,0.12), rgba(255,255,255,0))",
-          }}
-        />
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "linear-gradient(135deg, #ffffff 0%, #f3f6ff 45%, #fbf1ff 75%, #fff2f5 100%)", fontFamily: "Inter" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "64px 80px 0" }}>
           <OgMark size={56} />
           <div style={{ fontSize: 30, fontWeight: 700, color: "#1d1d1f", letterSpacing: -0.6 }}>We Build Your Ideas</div>

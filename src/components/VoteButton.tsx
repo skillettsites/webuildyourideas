@@ -9,20 +9,23 @@ type Props = {
   closed?: boolean;
   size?: "md" | "lg";
   title?: string;
+  // TikTok likes, which count towards the total but can't be toggled here.
+  bonus?: number;
 };
 
-export function VoteButton({ ideaId, count, closed = false, size = "md", title }: Props) {
+export function VoteButton({ ideaId, count, closed = false, size = "md", title, bonus = 0 }: Props) {
   const votes = useVotes(ideaId);
   const [error, setError] = useState("");
   const [bump, setBump] = useState(0);
   const voted = votes.voted.has(ideaId);
-  const shown = votes.counts.get(ideaId) ?? count;
+  const siteVotes = votes.counts.get(ideaId) ?? count;
+  const shown = siteVotes + bonus;
 
   async function onClick() {
     if (closed) return;
     setError("");
     setBump((b) => b + 1);
-    const r = await toggleVote(ideaId, shown);
+    const r = await toggleVote(ideaId, siteVotes);
     if (r.error) setError(r.error);
   }
 

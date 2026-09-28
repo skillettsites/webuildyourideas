@@ -8,6 +8,7 @@ import { NewIdeaBanner, ShareBar } from "@/components/ShareBar";
 import { VoteButton } from "@/components/VoteButton";
 import { LIMITS, SITE_URL, categoryLabel } from "@/lib/config";
 import { getIdeaBySlug, getRoundIdeas, rankIn } from "@/lib/ideas";
+import { sameText } from "@/lib/tiktok";
 import { formatRoundClose, formatShortDate, roundNumber } from "@/lib/rounds";
 
 export const revalidate = 30;
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const idea = await getIdeaBySlug(slug);
   if (!idea) return { title: "Idea not found", robots: { index: false } };
-  const indexable = idea.vote_count >= LIMITS.indexVotes || idea.status !== "open";
+  const indexable = idea.score >= LIMITS.indexVotes || idea.status !== "open";
   const desc = idea.description.replace(/\s+/g, " ").slice(0, 155);
   return {
     title: `${idea.title}: vote for this idea`,
@@ -56,8 +57,8 @@ export default async function IdeaPage({ params }: Props) {
     url,
     dateCreated: idea.created_at,
     genre: categoryLabel(idea.category),
-    ...(idea.author_name ? { author: { "@type": "Person", name: idea.author_name } } : {}),
-    interactionStatistic: { "@type": "InteractionCounter", interactionType: "https://schema.org/LikeAction", userInteractionCount: idea.vote_count },
+    ...(idea.author_name ? { author: { "@type": "Person", name: idea.source === "tiktok" ? `@${idea.author_name}` : idea.author_name } } : {}),
+    interactionStatistic: { "@type": "InteractionCounter", interactionType: "https://schema.org/LikeAction", userInteractionCount: idea.score },
     isPartOf: { "@type": "WebSite", name: "We Build Your Ideas", url: SITE_URL },
   };
 
@@ -96,16 +97,32 @@ export default async function IdeaPage({ params }: Props) {
                 <h1 className="mt-3 text-[34px] font-bold leading-[1.08] tracking-[-0.035em] text-ink sm:text-[48px]">{idea.title}</h1>
               </div>
               <div className="shrink-0">
-                <VoteButton ideaId={idea.id} count={idea.vote_count} closed={!open} size="lg" title={idea.title} />
+                <VoteButton ideaId={idea.id} count={idea.vote_count} bonus={idea.tiktok_likes} closed={!open} size="lg" title={idea.title} />
               </div>
             </div>
 
-            <p className="mt-6 whitespace-pre-line text-[19px] leading-relaxed tracking-[-0.012em] text-ink-2">{idea.description}</p>
+            {!sameText(idea.title, idea.description) && (
+              <p className="mt-6 whitespace-pre-line text-[19px] leading-relaxed tracking-[-0.012em] text-ink-2">{idea.description}</p>
+            )}
 
-            <p className="mt-8 border-t hairline pt-5 text-[14px] text-mute">
-              Shared by <span className="font-medium text-ink-2">{idea.author_name || "someone who prefers to stay anonymous"}</span> on{" "}
-              {formatShortDate(idea.created_at)}
-            </p>
+            {idea.source === "tiktok" ? (
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t hairline pt-5 text-[14px] text-mute">
+                <p>
+                  Suggested by <span className="font-medium text-ink-2">@{idea.tiktok_handle || "someone"}</span> in the comments on our TikTok.{" "}
+                  {idea.tiktok_likes} TikTok {idea.tiktok_likes === 1 ? "like" : "likes"} + {idea.vote_count} {idea.vote_count === 1 ? "vote" : "votes"} here.
+                </p>
+                {idea.tiktok_url && (
+                  <a href={idea.tiktok_url} target="_blank" rel="noopener nofollow" className="link-more !text-[14px]">
+                    See it on TikTok <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                )}
+              </div>
+            ) : (
+              <p className="mt-8 border-t hairline pt-5 text-[14px] text-mute">
+                Shared by <span className="font-medium text-ink-2">{idea.author_name || "someone who prefers to stay anonymous"}</span> on{" "}
+                {formatShortDate(idea.created_at)}
+              </p>
+            )}
 
             {idea.status === "built" && idea.built_url && (
               <div className="mt-8 rounded-[22px] bg-green-soft p-6">
@@ -129,7 +146,7 @@ export default async function IdeaPage({ params }: Props) {
           </article>
 
           {open && (
-            <div className="mt-4 grid gap-4 md:grid-cols-[1fr_1.3fr]">
+            <div className="mt-4 grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
               <div className="rounded-[28px] bg-white p-6">
                 <p className="text-[13px] font-medium text-mute">Voting closes in</p>
                 <p className="mt-1 text-[26px] font-semibold tracking-[-0.03em] text-ink">
