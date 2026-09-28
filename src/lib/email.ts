@@ -78,7 +78,7 @@ export function sendWinner(args: { to: string; name: string | null; title: strin
   const body = [
     p(`Hi ${esc(args.name || "there")},`),
     p(`Great news. <strong>${esc(args.title)}</strong> won Round ${args.round} with ${args.votes} ${args.votes === 1 ? "vote" : "votes"}, which means we are going to build it for you, free.`),
-    p("Reply to this email and tell us a little more: who it is for, anything you have already got (a name, a logo, some words), and the one thing it must do well. We will plan a first version with you, build it, and launch it."),
+    p(`Reply to this email, or send us a message at <a href="${SITE_URL}/contact" style="color:#0066cc">webuildyourideas.com/contact</a>, and tell us a little more: who it is for, anything you have already got (a name, a logo, some words), and the one thing it must do well. We will plan a first version with you, build it, and launch it.`),
     p("We will be in touch within two working days if we have not heard from you."),
   ].join("");
   return send(args.to, `You won Round ${args.round}! We’re building ${args.title}`, layout({ preheader: "Your idea got the most votes this week.", heading: "Your idea won.", body, cta: { text: "See the winning idea", url } }));
