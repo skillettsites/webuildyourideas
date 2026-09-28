@@ -45,8 +45,10 @@ export default async function HomePage() {
             className="rise inline-flex items-center gap-2.5 rounded-full bg-cloud px-4 py-2 text-[14px] font-medium text-ink transition-colors hover:bg-[#ebebef]"
           >
             <span className="live-dot" aria-hidden="true" />
-            Round {round} is open<span className="hidden sm:inline"> · voting closes Sunday 8pm</span>
-            <span className="sm:hidden"> · closes Sun 8pm</span>
+            <span>
+              Round {round} is open<span className="hidden sm:inline"> · voting closes Sunday 8pm</span>
+              <span className="sm:hidden"> · closes Sun 8pm</span>
+            </span>
             <ChevronRight className="h-4 w-4 text-mute" strokeWidth={2.4} />
           </Link>
           <h1 className="display-hero rise rise-1 mt-7">
