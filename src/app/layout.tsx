@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "Your idea. Built.", description: DESCRIPTION },
   robots: { index: true, follow: true },
   formatDetection: { telephone: false },
+  verification: { other: { "msvalidate.01": "8467B89365C947F24710AB7D84B06F92" } },
 };
 
 export const viewport: Viewport = {

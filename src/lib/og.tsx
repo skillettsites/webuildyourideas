@@ -1,14 +1,23 @@
 import "server-only";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { SITE_URL } from "./config";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
+// Fonts live in /public/fonts. At build time they are read from disk; inside a serverless
+// function the public folder is not on disk, so they are fetched from the site itself.
+async function loadFont(file: string): Promise<ArrayBuffer | Buffer> {
+  try {
+    return await readFile(join(process.cwd(), "public/fonts", file));
+  } catch {}
+  const res = await fetch(`${SITE_URL}/fonts/${file}`, { cache: "force-cache" });
+  if (!res.ok) throw new Error(`font ${file} ${res.status}`);
+  return res.arrayBuffer();
+}
+
 export async function ogFonts() {
-  const [bold, medium] = await Promise.all([
-    readFile(join(process.cwd(), "assets/Inter-700.ttf")),
-    readFile(join(process.cwd(), "assets/Inter-500.ttf")),
-  ]);
+  const [bold, medium] = await Promise.all([loadFont("Inter-700.ttf"), loadFont("Inter-500.ttf")]);
   return [
     { name: "Inter", data: bold, style: "normal" as const, weight: 700 as const },
     { name: "Inter", data: medium, style: "normal" as const, weight: 500 as const },

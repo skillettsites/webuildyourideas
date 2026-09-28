@@ -2,11 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // The share images read Inter from /assets at runtime.
-  outputFileTracingIncludes: {
-    "/opengraph-image": ["./assets/**"],
-    "/ideas/[slug]/opengraph-image": ["./assets/**"],
-  },
   async headers() {
     return [
       {
