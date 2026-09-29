@@ -1,23 +1,45 @@
--- Round 1 starter ideas (added 29 Sep 2026). Marked source = 'team' and shown as "Starter idea".
--- No votes are seeded. created_at is staggered so the board shows them in this order until votes come in.
-with ideas(n, title, description, category) as (values
-  (1, 'Where was this TikTok filmed?', 'Paste a travel or food TikTok and the app works out where it was filmed, then pins the spot on your own map. Next time you’re in that city, every place you saved is waiting for you, with directions.', 'app'),
-  (2, 'Last-minute room filler for B&Bs', 'B&Bs and guest houses post tonight’s empty rooms at a discount, and people nearby get a heads-up. Rooms that would have sat empty get filled, and no booking site takes a cut.', 'business'),
-  (3, 'TikTok recipes to a shopping list in one tap', 'Paste the link to any recipe TikTok and get the ingredients, amounts and method written out properly, plus a shopping list you can send to your supermarket. No more pausing the video fifty times.', 'app'),
-  (4, 'Is this builder’s quote fair?', 'Photograph a quote from a builder, plumber or electrician and see how it compares with typical prices in your area, plus the questions worth asking before you say yes.', 'tool'),
-  (5, 'Mystery walk generator', 'Tell it how long you’ve got and it plans a surprise walking route from your front door, with hidden stops like a blue plaque, a great view or an old pub. You only find out the next stop when you reach the last one.', 'app'),
-  (6, 'TikTok trend spotter for small businesses', 'Tells a café, salon or B&B which TikTok sounds and trends are taking off this week, then suggests three short videos they could film on their phone today.', 'tool'),
-  (7, 'Does this TikTok hack actually work?', 'Paste a cleaning trick, money tip or life hack from TikTok and get a straight verdict: works, sort of, or don’t bother, with the reasons and where the evidence comes from.', 'tool'),
-  (8, 'Comment section courtroom', 'Paste an argument from a comment section or a group chat and an impartial judge weighs up both sides, then delivers a verdict. Settle debates once and for all, complete with a gavel.', 'app'),
-  (9, 'Street sign storyteller', 'Point your phone at a street name sign and hear the story behind the name in under a minute. Brilliant on a walk, and it finally explains why you live on Gallows Hill.', 'app'),
-  (10, 'Allotment waiting list finder', 'One map of allotment sites near you, how long each waiting list is and who to contact. Add your own site’s wait time to help the next person.', 'website'),
-  (11, 'Kids’ party venue finder with real prices', 'Compare soft plays, church halls and activity centres near you by price per child, how many they hold and what’s included, without ringing round ten places.', 'website'),
-  (12, 'Repair café finder', 'A map of free repair cafés and fix-it events near you, what they can mend and when they’re next on. Fewer things in landfill, and you learn to fix them yourself.', 'community')
-)
+-- Round 1 starter ideas (29 Sep 2026). Marked source = 'team' and shown as "Starter idea".
+-- Every one is buildable in about a week on something that exists and is free:
+--   TikTok travel map / recipe box: TikTok's official oEmbed (caption, creator, thumbnail; no key),
+--     postcodes.io / OpenStreetMap for places.
+--   Takeaway hygiene league: Food Standards Agency ratings API (api.ratings.food.gov.uk).
+--   Mystery walk / allotment finder: OpenStreetMap via Overpass (viewpoints, pubs, memorials, landuse=allotments).
+--   Courtroom / review replies / quote explainer: Claude API.
+--   Room filler / holiday dates: plain database + email.
+-- Re-running is safe: it removes zero-vote starter ideas that are no longer listed, updates the
+-- listed ones in place (keeping their links and any votes), adds new ones, and sets the order.
+-- No votes are seeded.
+
+begin;
+
+create temporary table starter(n int, title text, description text, category text) on commit drop;
+insert into starter values
+  (1, 'TikTok travel map', 'Save travel and food TikToks to your own map. Paste the link, tell it the place, and the video is pinned to the spot, so your next trip is already planned and easy to share with friends.', 'app'),
+  (2, 'Last-minute room filler for B&Bs', 'B&Bs and guest houses post tonight’s empty rooms at a lower price, and people who’ve signed up for that area get an email straight away. Rooms that would have sat empty get filled, and no booking site takes a cut.', 'business'),
+  (3, 'Comment section courtroom', 'Paste an argument from a comment section or a group chat and an impartial AI judge weighs up both sides and gives its verdict, with reasons. Settle who was right once and for all.', 'app'),
+  (4, 'Review reply writer for small businesses', 'Paste a Google or TripAdvisor review and get a warm, professional reply in your own voice, ready to post. Especially handy for the tricky one-star ones.', 'tool'),
+  (5, 'TikTok recipe box', 'Paste a recipe TikTok and save it as a tidy card with the video, ingredients and method. Pick a few for the week and get one combined shopping list.', 'app'),
+  (6, 'Takeaway hygiene league table', 'Every takeaway in your town ranked by its official food hygiene rating, with the date it was last inspected. Check before you order, using the Food Standards Agency’s own data.', 'website'),
+  (7, 'Mystery walk generator', 'Tell it how long you’ve got and it plans a walk from your door with a few surprise stops, like a viewpoint, a historic memorial or a good pub, taken from open map data.', 'app'),
+  (8, 'Group holiday date finder', 'Send one link to the group, everyone taps the dates they’re free, and it shows the best week for the most people. No more 200-message group chats.', 'tool'),
+  (9, 'Builder’s quote explainer', 'Photograph a quote from a builder or tradesperson and get it explained line by line in plain English, with anything that looks missing, like VAT, waste removal or payment terms, and the questions worth asking.', 'tool'),
+  (10, 'Allotment waiting list finder', 'A map of allotment sites near you and who to contact for each one, plus waiting times shared by the people already on the list.', 'website');
+
+delete from wbyi_ideas w
+where w.source = 'team' and w.vote_count = 0 and w.round_end = wbyi_round_end(now())
+  and not exists (select 1 from starter s where s.title = w.title);
+
+update wbyi_ideas w
+set description = s.description, category = s.category, created_at = now() - ((11 - s.n) * interval '1 minute')
+from starter s
+where w.source = 'team' and w.title = s.title and w.round_end = wbyi_round_end(now());
+
 insert into wbyi_ideas (slug, title, description, category, author_name, round_end, source, created_at)
 select
-  trim(both '-' from left(regexp_replace(lower(title), '[^a-z0-9]+', '-', 'g'), 60)) || '-' || substr(md5(gen_random_uuid()::text), 1, 5),
-  title, description, category, 'We Build Your Ideas', wbyi_round_end(now()), 'team',
-  now() - ((13 - n) * interval '1 minute')
-from ideas
-where not exists (select 1 from wbyi_ideas w where w.title = ideas.title and w.round_end = wbyi_round_end(now()));
+  trim(both '-' from left(regexp_replace(lower(s.title), '[^a-z0-9]+', '-', 'g'), 60)) || '-' || substr(md5(gen_random_uuid()::text), 1, 5),
+  s.title, s.description, s.category, 'We Build Your Ideas', wbyi_round_end(now()), 'team',
+  now() - ((11 - s.n) * interval '1 minute')
+from starter s
+where not exists (select 1 from wbyi_ideas w where w.title = s.title and w.round_end = wbyi_round_end(now()));
+
+commit;

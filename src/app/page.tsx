@@ -137,7 +137,7 @@ export default async function HomePage() {
             <StepTile n={1} title="Share it." text="Tell us your idea in a sentence or two, here or in the comments on our TikTok. It’s free and takes about two minutes." delay={0}>
               <div className="rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
                 <div className="text-[11px] font-semibold text-mute">Your idea</div>
-                <div className="mt-1.5 text-[14px] font-semibold text-ink">TikTok recipes to a shopping list</div>
+                <div className="mt-1.5 text-[14px] font-semibold text-ink">TikTok recipe box</div>
                 <div className="mt-2 h-2 w-4/5 rounded-full bg-cloud" />
                 <div className="mt-1.5 h-2 w-3/5 rounded-full bg-cloud" />
                 <div className="mt-4 inline-flex rounded-full bg-blue px-3 py-1 text-[12px] font-medium text-white">Submit idea</div>
@@ -146,9 +146,9 @@ export default async function HomePage() {
             <StepTile n={2} title="Rally the votes." text="Anyone can vote. Share your idea with friends, family and anyone it would help." delay={1}>
               <div className="space-y-2">
                 {[
-                  ["Where was this TikTok filmed?", true],
+                  ["TikTok travel map", true],
                   ["Last-minute room filler for B&Bs", false],
-                  ["Mystery walk generator", false],
+                  ["Takeaway hygiene league table", false],
                 ].map(([t, v], n) => (
                   <div key={String(t)} className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
                     <div className="min-w-0 flex-1 truncate text-[13px] font-semibold text-ink">{t}</div>
