@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { track } from "@/lib/track";
 
 const EXAMPLES = [
-  { label: "Dog walker", name: "", text: "Small-group dog walks around Roundhay Park in Leeds, plus puppy visits and holiday cover." },
-  { label: "Bakery", name: "", text: "A Saturday bakery stall in York. Sourdough, cinnamon buns and birthday cakes to order." },
-  { label: "Plumber", name: "", text: "I’m a plumber based in Newcastle. Boilers, leaks and bathroom installs. Call 0191 498 0123." },
-  { label: "Yoga teacher", name: "", text: "Yoga classes for beginners in Brighton, plus private sessions. Friendly, calm and no pressure." },
+  { label: "B&B", name: "", text: "A four-bedroom bed and breakfast in the Yorkshire Dales. Home-made breakfasts, walks from the door and private parking." },
+  { label: "Holiday cottage", name: "", text: "A holiday cottage in Northumberland that sleeps six, with a wood burner, a hot tub and dogs welcome." },
+  { label: "Electrician", name: "", text: "I’m an electrician in Leeds. Rewires, fuse boards, EV chargers and emergency call-outs. Call 0113 496 0123." },
+  { label: "Hair salon", name: "", text: "A friendly hair salon in Chester. Cuts, colour and balayage, plus bridal hair." },
+  { label: "Driving instructor", name: "", text: "Patient driving lessons in Leicester for nervous beginners, in automatic and manual cars, plus intensive courses." },
 ];
 
 type SpeechRec = {

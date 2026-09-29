@@ -49,7 +49,11 @@ export async function GET(req: Request) {
           ? [
               `🏆 Round ${round} closed`,
               `Winner: ${r.winner_title} (${r.winner_votes} votes)`,
-              r.winner_email ? `By ${r.winner_name || "Anonymous"} · ${r.winner_email}` : `From TikTok: ${r.winner_name}. Message them on TikTok to plan the build.`,
+              r.winner_email
+                ? `By ${r.winner_name || "Anonymous"} · ${r.winner_email}`
+                : r.winner_name?.startsWith("@")
+                  ? `From TikTok: ${r.winner_name}. Message them on TikTok to plan the build.`
+                  : "A starter idea from the team won. Build it and launch it for everyone.",
               `${r.idea_count} ideas, ${r.vote_count} votes in total`,
               `Winner email: ${winnerEmail}`,
             ]

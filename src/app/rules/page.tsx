@@ -17,8 +17,8 @@ export default function RulesPage() {
     >
       <h2>1. Who can take part</h2>
       <p>
-        Anyone aged 18 or over can share an idea. Anyone can vote. Taking part is free and there is nothing to buy. We Build Your Ideas, its team
-        and their families can’t win.
+        Anyone aged 18 or over can share an idea. Anyone can vote. Taking part is free and there is nothing to buy. Members of the We Build Your
+        Ideas team and their families can’t enter ideas of their own for the prize.
       </p>
 
       <h2>2. Rounds</h2>
@@ -52,7 +52,13 @@ export default function RulesPage() {
         <li>Likes bought, botted or gathered by any trick don’t count, and we may disqualify an idea that has used them.</li>
       </ul>
 
-      <h2>6. Choosing the winner</h2>
+      <h2>6. Starter ideas</h2>
+      <p>
+        To get each round going, we may add a few ideas of our own. They are clearly marked “Starter idea”, start with no votes, and can win like any
+        other idea. If one does, we build it and launch it for everyone to use.
+      </p>
+
+      <h2>7. Choosing the winner</h2>
       <p>
         When voting closes, the idea with the highest score wins. The score is its votes here plus, for ideas from TikTok, its TikTok likes. If two ideas tie, the one shared first wins. An idea needs a score of at least one to win.
         We may pass over an idea, and pick the next in line, if it:
@@ -65,7 +71,7 @@ export default function RulesPage() {
       </ul>
       <p>We email the winner on Sunday evening and show the result on the site.</p>
 
-      <h2>7. What the winner gets</h2>
+      <h2>8. What the winner gets</h2>
       <ul>
         <li>A conversation with us to agree a focused first version of the idea.</li>
         <li>Design, build and launch of that first version on the web, free of charge.</li>
@@ -77,20 +83,20 @@ export default function RulesPage() {
         line instead.
       </p>
 
-      <h2>8. Using your idea</h2>
+      <h2>9. Using your idea</h2>
       <p>
         By sharing an idea you give us permission to show it on this site and to talk about it, and about any build, in our own marketing. Winning
         builds carry a small “Built by We Build Your Ideas” credit. Ideas themselves can’t be owned, and other people may have had the same idea, so
         sharing one doesn’t stop anyone else, including us, from working on something similar.
       </p>
 
-      <h2>9. Moderation</h2>
+      <h2>10. Moderation</h2>
       <p>
         We may edit a title for clarity, or hide or remove any idea that breaks these rules, without notice. If you think we’ve got something wrong,{" "}
         <Link href="/contact">get in touch</Link>.
       </p>
 
-      <h2>10. Changes</h2>
+      <h2>11. Changes</h2>
       <p>
         We may update these rules from time to time. Changes apply to rounds that start after the change is published. The version on this page is
         the one that applies.

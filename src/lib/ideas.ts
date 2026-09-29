@@ -16,7 +16,7 @@ export type Idea = {
   built_summary: string | null;
   built_at: string | null;
   created_at: string;
-  source: "site" | "tiktok";
+  source: "site" | "tiktok" | "team";
   tiktok_likes: number;
   tiktok_handle: string | null;
   tiktok_url: string | null;

@@ -105,7 +105,12 @@ export default async function IdeaPage({ params }: Props) {
               <p className="mt-6 whitespace-pre-line text-[19px] leading-relaxed tracking-[-0.012em] text-ink-2">{idea.description}</p>
             )}
 
-            {idea.source === "tiktok" ? (
+            {idea.source === "team" ? (
+              <p className="mt-8 border-t hairline pt-5 text-[14px] text-mute">
+                <span className="font-medium text-blue">Starter idea.</span> We add a few ideas of our own to get each round going. It can win like any
+                other idea, and if it does, we build it for everyone.
+              </p>
+            ) : idea.source === "tiktok" ? (
               <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t hairline pt-5 text-[14px] text-mute">
                 <p>
                   Suggested by <span className="font-medium text-ink-2">@{idea.tiktok_handle || "someone"}</span> in the comments on our TikTok.{" "}

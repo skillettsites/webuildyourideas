@@ -9,10 +9,10 @@ import { PhoneFrame, ScaledSite } from "./DeviceFrames";
 export function PhoneSample() {
   const html = useMemo(() => {
     const s = buildSite({
-      name: "Clear Maths",
-      description: "Maths tutor for GCSE students in Reading. I was a teacher for ten years and I make maths make sense.",
+      name: "",
+      description: "Tidewell Cottage: a holiday cottage in Robin Hood's Bay that sleeps four, a short walk down to the beach. Wood burner, sea views and dogs welcome.",
     });
-    return renderSite({ ...s, accent: "blue" });
+    return renderSite({ ...s, layout: "bold" });
   }, []);
   return (
     <PhoneFrame>

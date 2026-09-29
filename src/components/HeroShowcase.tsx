@@ -6,12 +6,13 @@ import { renderSite } from "@/lib/site/render";
 import { BrowserFrame, ScaledSite } from "./DeviceFrames";
 
 // Real output from the free preview engine, fed the same kind of sentence a visitor would type.
-// Names are fictional and each domain was checked as unregistered on 28 Sep 2026.
+// Names are fictional: each was checked against real UK businesses and each domain was
+// unregistered on 29 Sep 2026. Phone numbers use Ofcom's drama range.
 const EXAMPLES = [
-  { tab: "Bakery", name: "", domain: "brightcrumb.co.uk", text: "A Saturday bakery stall in York called Bright Crumb. Sourdough, cinnamon buns and birthday cakes to order." },
-  { tab: "Dog walker", name: "", domain: "tailtrailsleeds.co.uk", text: "Tail Trails: small-group dog walks around Roundhay Park in Leeds, plus puppy visits." },
-  { tab: "Choir", name: "The Oakwood Choir", domain: "oakwoodchoirstockport.co.uk", text: "A friendly community choir in Stockport that meets on Tuesday evenings. No auditions, all voices welcome." },
-  { tab: "Photographer", name: "", domain: "ellahartphotography.co.uk", text: "Wedding and family photography in Bristol by Ella Hart. Relaxed, natural, no stiff poses." },
+  { tab: "B&B", name: "", domain: "fellcrofthousekeswick.co.uk", text: "Fellcroft House: a four-bedroom bed and breakfast in Keswick, a short walk from Derwentwater. Full Cumbrian breakfast, dog friendly rooms and private parking." },
+  { tab: "Electrician", name: "", domain: "amberlineelectrical.co.uk", text: "Amberline Electrical: electrician in Bristol. Rewires, fuse board upgrades and EV chargers. Call 0117 496 0123." },
+  { tab: "Hair salon", name: "", domain: "ivyandash.co.uk", text: "Ivy & Ash: a hair salon in Harrogate. Cuts, colour, balayage and bridal hair." },
+  { tab: "Personal trainer", name: "", domain: "ironbarkpt.co.uk", text: "Ironbark PT: personal training in Glasgow. One-to-one sessions, small group classes and online plans for busy people." },
 ];
 
 export function HeroShowcase() {

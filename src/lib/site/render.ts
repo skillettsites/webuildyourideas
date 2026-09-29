@@ -2,11 +2,11 @@
 // every piece of user text escaped. Used for free previews (inside a sandboxed iframe),
 // the home page showcase, and as the starting point for a paid build.
 import {
-  ArrowRight, BookOpen, Briefcase, CakeSlice, CalendarCheck, CalendarDays, Camera, ChartLine, ChefHat,
+  ArrowRight, BedDouble, BookOpen, Briefcase, CakeSlice, CalendarCheck, CalendarDays, Camera, ChartLine, ChefHat,
   ClipboardList, Coffee, Croissant, Dog, Dumbbell, Flower2, Gift, GraduationCap, HandHeart, Hammer, Heart,
   HeartPulse, House, Image, KeyRound, Laptop, Leaf, Mail, MapPin, Megaphone, MessagesSquare, Music, Package,
   Palette, PawPrint, PenTool, Phone, Rocket, Scissors, ShieldCheck, ShoppingBag, Smartphone, Sparkles, Star,
-  Ticket, Timer, Users, Utensils, Wrench, Zap,
+  Ticket, Timer, TreePine, Users, Utensils, Wrench, Zap,
 } from "lucide-static";
 import { iconsFor, type AccentId, type IconName, type LayoutId, type SiteCategory, type SiteContent } from "./content";
 
@@ -33,7 +33,7 @@ const ICONS: Record<IconName | "arrow" | "phone" | "mail" | "pin", string> = {
   "chef-hat": ChefHat, "calendar-check": CalendarCheck, wrench: Wrench, hammer: Hammer, "shield-check": ShieldCheck,
   sparkles: Sparkles, house: House, "key-round": KeyRound, scissors: Scissors, gift: Gift, dumbbell: Dumbbell,
   heart: Heart, timer: Timer, camera: Camera, image: Image, "graduation-cap": GraduationCap, "book-open": BookOpen,
-  laptop: Laptop, "paw-print": PawPrint, dog: Dog, "heart-pulse": HeartPulse, "clipboard-list": ClipboardList,
+  laptop: Laptop, "paw-print": PawPrint, dog: Dog, "bed-double": BedDouble, "tree-pine": TreePine, "heart-pulse": HeartPulse, "clipboard-list": ClipboardList,
   briefcase: Briefcase, "chart-line": ChartLine, "messages-square": MessagesSquare, "shopping-bag": ShoppingBag,
   package: Package, rocket: Rocket, smartphone: Smartphone, zap: Zap, palette: Palette, "pen-tool": PenTool,
   "calendar-days": CalendarDays, ticket: Ticket, "map-pin": MapPin, users: Users, "hand-heart": HandHeart,
@@ -50,7 +50,7 @@ export function escapeHtml(value: string): string {
 }
 
 const SECTION_TITLE: Partial<Record<SiteCategory, string>> = {
-  bakery: "On the menu", cafe: "On the menu", food: "On the menu", shop: "Shop", tech: "Why you will love it",
+  stay: "Your stay", bakery: "On the menu", cafe: "On the menu", food: "On the menu", shop: "Shop", tech: "Why you will love it",
   events: "The details", community: "Get involved", creative: "Work", photography: "Work",
 };
 
@@ -58,7 +58,7 @@ const CTA_LINE: Partial<Record<SiteCategory, string>> = {
   trades: "Get a free quote today.", cleaning: "Let us take care of it.", beauty: "Book your next appointment.",
   fitness: "Your first session starts here.", photography: "Let’s make something lovely.", tutoring: "Book a first lesson.",
   pets: "Your dog will thank you.", health: "Book an appointment.", professional: "Let’s talk.",
-  bakery: "Hungry yet?", cafe: "Come in and stay a while.", food: "Hungry yet?", shop: "Find something you love.",
+  stay: "We would love to welcome you.", bakery: "Hungry yet?", cafe: "Come in and stay a while.", food: "Hungry yet?", shop: "Find something you love.",
   tech: "Be first in line.", creative: "Let’s work together.", events: "See you there.", community: "Come and join us.",
 };
 

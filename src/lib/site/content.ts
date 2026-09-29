@@ -5,7 +5,7 @@ export type LayoutId = "classic" | "bold" | "studio" | "minimal" | "event";
 export type AccentId = "blue" | "green" | "teal" | "orange" | "pink" | "purple" | "graphite";
 
 export type SiteCategory =
-  | "bakery" | "cafe" | "food" | "trades" | "cleaning" | "beauty" | "fitness" | "photography"
+  | "stay" | "bakery" | "cafe" | "food" | "trades" | "cleaning" | "beauty" | "fitness" | "photography"
   | "tutoring" | "pets" | "health" | "professional" | "shop" | "tech" | "creative" | "events"
   | "community" | "general";
 
@@ -25,7 +25,7 @@ export type IconName =
   | "croissant" | "cake-slice" | "star" | "coffee" | "utensils" | "chef-hat" | "calendar-check" | "wrench"
   | "hammer" | "shield-check" | "sparkles" | "house" | "key-round" | "scissors" | "gift" | "dumbbell"
   | "heart" | "timer" | "camera" | "image" | "graduation-cap" | "book-open" | "laptop" | "paw-print"
-  | "dog" | "heart-pulse" | "clipboard-list" | "briefcase" | "chart-line" | "messages-square"
+  | "dog" | "bed-double" | "tree-pine" | "heart-pulse" | "clipboard-list" | "briefcase" | "chart-line" | "messages-square"
   | "shopping-bag" | "package" | "rocket" | "smartphone" | "zap" | "palette" | "pen-tool" | "calendar-days"
   | "ticket" | "map-pin" | "users" | "hand-heart" | "megaphone" | "leaf" | "flower-2" | "music";
 
@@ -49,6 +49,25 @@ const inPlace = (label: string, place: string) => (place ? `${label} in ${place}
 
 const PROFILES: Profile[] = [
   {
+    id: "stay",
+    re: /\b(b ?& ?b|b and b|bed and breakfast|bed & breakfast|guest ?house|holiday (?:cottage|let|home|rental|apartment)s?|self[- ]catering|cottages?|glamping|shepherd['’]?s huts?|cabins?|lodges?|country inn|coaching inn|boutique hotel|small hotel|hotel|campsite|holiday park)\b/i,
+    label: "Bed and breakfast",
+    subs: [
+      { re: /\b(b ?& ?b|b and b|bed and breakfast|bed & breakfast|guest ?house)/i, label: "Bed and breakfast", services: ["Our rooms", "Breakfast", "Things to do nearby"] },
+      { re: /\b(holiday (?:cottage|let|home|rental|apartment)s?|self[- ]catering|cottages?)/i, label: "Holiday cottage", services: ["The cottage", "Things to do nearby", "Getting here"] },
+      { re: /\b(glamping|shepherd['’]?s huts?|cabins?|lodges?|campsite|holiday park)/i, label: "Glamping site", services: ["Where you’ll stay", "Facilities", "Things to do nearby"] },
+      { re: /\b(country inn|coaching inn)/i, label: "Country inn", services: ["Rooms", "Food and drink", "Things to do nearby"] },
+      { re: /\bhotel/i, label: "Small hotel", services: ["Rooms", "Dining", "Things to do nearby"] },
+    ],
+    cta: "Check availability",
+    services: ["Rooms", "Breakfast", "Things to do nearby"],
+    layout: "classic",
+    accent: "teal",
+    icons: ["bed-double", "coffee", "tree-pine"],
+    tagline: inPlace,
+    about: (b, l, p) => `${b} is a ${l.toLowerCase()}${p ? ` in ${p}` : ""}. Book direct with us and we will do everything we can to make your stay a special one.`,
+  },
+  {
     id: "photography",
     re: /\b(photographer|photography|videographer|videography|photo ?shoots?|headshots)\b/i,
     label: "Photography",
@@ -68,7 +87,7 @@ const PROFILES: Profile[] = [
   },
   {
     id: "pets",
-    re: /\b(dogs?|puppy|puppies|cats?|pets?|dog ?walk\w*|kennels?|cattery|dog groom\w*|pet groom\w*)\b/i,
+    re: /\b(dogs?(?![- ]friendly)|puppy|puppies|cats?|pets?(?![- ]friendly)|dog ?walk\w*|kennels?|cattery|dog groom\w*|pet groom\w*)\b/i,
     label: "Pet care",
     subs: [
       { re: /\bwalk/i, label: "Dog walking", services: ["Group walks", "Solo walks", "Puppy visits"] },
@@ -158,18 +177,6 @@ const PROFILES: Profile[] = [
     about: (b, l, p) => `${b} provides ${l.toLowerCase()}${p ? ` across ${p}` : ""}. Careful, thorough and on time, so you can get on with your day.`,
   },
   {
-    id: "bakery",
-    re: /\b(bak\w*|bread|sourdough|cakes?|cupcakes?|patisserie|pastr\w*|brownies|cookies|doughnuts?)\b/i,
-    label: "Bakery",
-    cta: "Order now",
-    services: ["Fresh bread", "Celebration cakes", "Weekly specials"],
-    layout: "bold",
-    accent: "orange",
-    icons: ["croissant", "cake-slice", "star"],
-    tagline: (_l, p) => (p ? `Fresh baking in ${p}` : "Fresh baking, made with care"),
-    about: (b, _l, p) => `${b} bakes in small batches${p ? ` in ${p}` : ""}. Order ahead for celebrations, or come early for the best of the day.`,
-  },
-  {
     id: "cafe",
     re: /\b(caf[eé]|coffee|brunch|tea ?rooms?|espresso)\b/i,
     label: "Café",
@@ -180,6 +187,18 @@ const PROFILES: Profile[] = [
     icons: ["coffee", "utensils", "cake-slice"],
     tagline: (_l, p) => (p ? `Good coffee in ${p}` : "Good coffee, good company"),
     about: (b, _l, p) => `${b} is an independent café${p ? ` in ${p}` : ""}. Pull up a chair, stay a while.`,
+  },
+  {
+    id: "bakery",
+    re: /\b(bak\w*|bread|sourdough|cakes?|cupcakes?|patisserie|pastr\w*|brownies|cookies|doughnuts?)\b/i,
+    label: "Bakery",
+    cta: "Order now",
+    services: ["Fresh bread", "Celebration cakes", "Weekly specials"],
+    layout: "bold",
+    accent: "orange",
+    icons: ["croissant", "cake-slice", "star"],
+    tagline: (_l, p) => (p ? `Fresh baking in ${p}` : "Fresh baking, made with care"),
+    about: (b, _l, p) => `${b} bakes in small batches${p ? ` in ${p}` : ""}. Order ahead for celebrations, or come early for the best of the day.`,
   },
   {
     id: "trades",
@@ -398,7 +417,8 @@ function readBrand(text: string, name: string): string {
   const called = text.match(/\b(?:called|named|name is|name’s|name's|brand is)\s+["“‘']?([A-Z0-9][\w&’'-]*(?:\s+(?:[A-Z0-9&][\w&’'-]*|of|and|the|&)){0,4})/);
   if (called) return clip(called[1].replace(/\s+(of|and|the|&)$/i, ""), 40);
   const lead = text.trim().match(/^([A-Z][\w&’'-]*(?:\s+[A-Z&][\w&’'-]*){0,3})\s*(?::|\s-\s|\s–\s|\s+is\s+an?\s)/);
-  if (lead && !NOT_PLACES.has(lead[1].split(" ")[0])) return clip(lead[1], 40);
+  // "The Old Rectory: ..." is a name; "We: ..." or "My: ..." is not.
+  if (lead && !["I", "We", "It", "This", "That", "Our", "My", "Your"].includes(lead[1].split(" ")[0])) return clip(lead[1], 40);
   const by = text.match(/\bby\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\b/);
   if (by) return clip(by[1], 40);
   return "";
@@ -446,7 +466,7 @@ function readServices(parts: string[]): { items: string[]; used: number; qualiti
     const triggered = stripped !== s;
     const items = stripped
       .split(/,\s*|\s+and\s+|\s+&\s+|\s+plus\s+/i)
-      .map((x) => x.trim())
+      .map((x) => x.trim().replace(/^(?:plus|and|also)\s+/i, ""))
       .filter(Boolean);
     // The first sentence usually says what the thing is, so only mine it for a list when asked to.
     if (i === 0 && !triggered) continue;
@@ -502,11 +522,22 @@ export function buildSite(input: { name: string; description: string }): ParsedS
   const first = rest[0] ? asStatement(rest[0], brandFound) : "";
   const qualities = svc.qualities >= 0 ? cap(parts[svc.qualities].replace(/[.!?]*$/, ".")) : "";
   let intro = qualities || (rest[1] ? cap(rest[1]) : first);
+
+  // "Electrician in Bristol." as an intro only repeats the headline. Use the profile's
+  // promise line instead ("Clear quotes, tidy work and no surprises.") and keep the
+  // person's own sentence for the About section.
+  const template = profile.about(brand, label, place);
+  const [templateLead, ...templateRest] = sentences(template);
+  const promise = templateRest.join(" ");
+  const norm = (x: string) => x.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const weak = (x: string) => x.replace(/[.!?]+$/, "").trim().split(/\s+/).length < 6 || norm(x) === norm(tagline);
+  const borrowed = !qualities && Boolean(promise) && weak(intro);
+  if (borrowed) intro = promise;
   intro = clip(intro, 200);
 
   const aboutParts = [first, ...rest.slice(qualities ? 1 : 2)].filter((s) => s && s !== intro);
   let about = words(aboutParts.join(" "));
-  if (about.length < 80) about = words(`${about} ${profile.about(brand, label, place)}`);
+  if (about.length < 80) about = words(`${about} ${borrowed ? templateLead : template}`);
   about = clip(about, 600);
 
   const services = svc.items.length >= 2 ? svc.items : (subServices ?? profile.services);

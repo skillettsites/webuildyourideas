@@ -48,7 +48,11 @@ export function IdeaRow({ idea, rank, closed = false, now }: { idea: IdeaRowData
         <p className="mt-2.5 text-[13px] text-mute-2">
           <span className="font-medium text-ink-2">{categoryLabel(idea.category)}</span>
           <span className="mx-1.5">·</span>
-          {idea.source === "tiktok" ? (
+          {idea.source === "team" ? (
+            <>
+              <span className="font-medium text-blue">Starter idea</span> from the team
+            </>
+          ) : idea.source === "tiktok" ? (
             <>
               <span className="font-medium text-[#ee1d52]">TikTok</span> @{idea.tiktok_handle || "someone"} · {idea.tiktok_likes ?? 0} likes
             </>
