@@ -43,3 +43,17 @@ Next.js 16 App Router, TypeScript strict, Tailwind v4 with hand-written design-s
 
 ## Commit identity and deploy
 Always `git -c user.name="skillettsites" -c user.email="davidskillett@hotmail.co.uk" commit ...`. Production branch `master`. Push to deploy.
+
+## Client accounts (added 29 Sep 2026)
+Paying clients sign in and manage their website through the site instead of email. First client: **Brian McLean (Kilmarnock FC), Priority plan, billing complimentary, site Kilmarnock Loans** (repo `skillettsites/kilmarnock-loans`).
+- **Sign-in** `/login`: email -> six-digit code or one-tap link (15 min, hashed with `SESSION_SECRET`, five wrong tries burn it, same answer for unknown emails). Session = HMAC-signed `wbyi_client` cookie (httpOnly, 90 days) + a harmless `wbyi_in=1` hint cookie that only tells the nav to say "Your account".
+- **Client pages**: `/account` (site card, allowance %, open/completed requests, Recent updates feed), `/account/new`, `/account/requests/[id]` (Messages-style thread, replies, files).
+- **Allowance**: units per month, starter 5 / growth 10 / pro 20 / priority 30; a request counts only when Done and sized (small 1, medium 3, large 8). Clients see a percentage only. Resets on the day of the month the account was opened (`anchor_day`).
+- **Files** are stored as `bytea` in `wbyi_attachments` behind key-gated RPCs, never in Supabase Storage (the shared project's anon key is public in other sites' bundles, and client files can hold personal data). Uploads go one file per request (Vercel 4.5 MB body cap); the browser shrinks big photos first. SVG/HTML are refused.
+- **Admin**: `/admin#client-requests` queue (Priority first), `/admin/requests/[id]` (status, size, message, files, "email the client" switch), `/admin#clients` (add/update client + site, change login email, post to their updates feed). Marking Done adds the request to the client's Recent updates.
+- **Agent API for Claude sessions / scheduled jobs** (header `Authorization: Bearer $AGENT_KEY`):
+  - `GET /api/agent/requests?status=new,in_progress,needs_info` -> the queue.
+  - `GET /api/agent/requests/{id}` -> request, thread, attachment URLs (`/api/agent/attachments/{id}`, same header).
+  - `POST /api/agent/requests/{id}` JSON `{status?, size?, message?, notify? (default true), updateTitle?}` -> moves it along and emails the client.
+  This replaces the old desktop script that scanned Outlook for Brian's emails.
+- Telegram alerts on every new client request and client reply. Emails go from hello@; they tell clients to reply in their account (hello@ has no inbox routing yet).

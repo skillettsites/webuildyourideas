@@ -128,3 +128,49 @@ export function sendDigest(args: {
     { "List-Unsubscribe": `<${unsub}>` },
   );
 }
+
+// ---------- Client accounts ----------
+
+export function sendLoginCode(args: { to: string; name: string; code: string; link: string }) {
+  const body = [
+    p(`Hi ${esc(args.name.split(" ")[0] || "there")},`),
+    p("Here’s your sign-in code for We Build Your Ideas. It works for 15 minutes."),
+    `<p style="margin:6px 0 18px;font-size:34px;font-weight:700;letter-spacing:.18em;color:#1d1d1f">${esc(args.code)}</p>`,
+    p("Or just tap the button below on this device."),
+  ].join("");
+  return send(
+    args.to,
+    `Your sign-in code: ${args.code}`,
+    layout({
+      preheader: `Your code is ${args.code}. It works for 15 minutes.`,
+      heading: "Sign in to your account.",
+      body,
+      cta: { text: "Sign in", url: args.link },
+      footer: "Didn’t ask for this? You can ignore this email. Nobody can sign in without the code.",
+    }),
+  );
+}
+
+export function sendRequestReceived(args: { to: string; name: string; ref: number; title: string; url: string; priority: boolean }) {
+  const body = [
+    p(`Hi ${esc(args.name.split(" ")[0] || "there")},`),
+    p(`Thanks, we’ve got request <strong>#${args.ref}: ${esc(args.title)}</strong>.${args.priority ? " You’re on the Priority plan, so it goes to the front of the queue." : ""}`),
+    p("You can follow its progress, add details or send more screenshots from your account at any time. We’ll email you when there’s news."),
+  ].join("");
+  return send(args.to, `Request #${args.ref} received: ${args.title}`, layout({ preheader: "We’ve got your request.", heading: "Request received.", body, cta: { text: "View request", url: args.url } }));
+}
+
+export function sendRequestUpdate(args: { to: string; name: string; ref: number; title: string; url: string; status?: string; message?: string }) {
+  const lines = [p(`Hi ${esc(args.name.split(" ")[0] || "there")},`)];
+  if (args.status === "done") lines.push(p(`Good news: request <strong>#${args.ref}: ${esc(args.title)}</strong> is done and live on your site.`));
+  else if (args.status === "needs_info") lines.push(p(`We need a little more from you on request <strong>#${args.ref}: ${esc(args.title)}</strong>.`));
+  else if (args.status === "in_progress") lines.push(p(`We’ve started work on request <strong>#${args.ref}: ${esc(args.title)}</strong>.`));
+  else lines.push(p(`There’s an update on request <strong>#${args.ref}: ${esc(args.title)}</strong>.`));
+  if (args.message) {
+    lines.push(`<div style="margin:0 0 16px;padding:14px 16px;border-radius:14px;background:#f5f5f7;color:#1d1d1f;white-space:pre-line">${esc(args.message)}</div>`);
+  }
+  lines.push(p("To reply, open the request in your account."));
+  const subject =
+    args.status === "done" ? `Done: #${args.ref} ${args.title}` : args.status === "needs_info" ? `Question about #${args.ref}: ${args.title}` : `Update on #${args.ref}: ${args.title}`;
+  return send(args.to, subject, layout({ preheader: args.message?.slice(0, 90) || "There’s news on your request.", heading: args.status === "done" ? "It’s live." : "An update on your request.", body: lines.join(""), cta: { text: "Open request", url: args.url } }));
+}

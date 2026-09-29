@@ -37,3 +37,23 @@ export type PlanId = (typeof PLANS)[number]["id"];
 export function planById(id: string) {
   return PLANS.find((p) => p.id === id) ?? null;
 }
+
+// Monthly change allowance for client accounts, in units. Customers only ever see a
+// percentage. Units line up with the original spec's internal caps (£5/£10/£20/£30).
+export const PLAN_ALLOWANCE: Record<PlanId, number> = { starter: 5, growth: 10, pro: 20, priority: 30 };
+
+export const SIZE_UNITS = { small: 1, medium: 3, large: 8 } as const;
+export type RequestSize = keyof typeof SIZE_UNITS;
+
+export const SIZE_LABEL: Record<RequestSize, string> = {
+  small: "Small change",
+  medium: "Medium change",
+  large: "Large change",
+};
+
+export const PLAN_PERKS: Record<PlanId, string[]> = {
+  starter: ["Your site hosted, secured and kept up to date", "Small updates each month"],
+  growth: ["Twice the monthly updates", "New pages and sections"],
+  pro: ["Four times the updates", "Custom features built for you"],
+  priority: ["Your requests go to the front of the queue", "A personal check before every update goes live", "Six times the monthly updates"],
+};

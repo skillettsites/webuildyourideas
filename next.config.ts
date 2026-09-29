@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/(start|admin|ideas/manage|unsubscribe)/:path*",
+        source: "/(start|admin|ideas/manage|unsubscribe|account|login)/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];

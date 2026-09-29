@@ -17,6 +17,9 @@ export function SiteNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => setSignedIn(/(?:^|; )wbyi_in=1/.test(document.cookie)), [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -60,6 +63,12 @@ export function SiteNav() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
+          <Link
+            href={signedIn ? "/account" : "/login"}
+            className={`hidden px-2 text-[13px] tracking-[-0.01em] transition-colors md:inline ${active("/login") || active("/account") ? "text-ink" : "text-ink/75 hover:text-ink"}`}
+          >
+            {signedIn ? "Your account" : "Sign in"}
+          </Link>
           <Link href="/ideas/submit" className="btn btn-primary btn-sm hidden sm:inline-flex">
             Submit an idea
           </Link>
@@ -87,7 +96,7 @@ export function SiteNav() {
         }`}
       >
         <ul className="space-y-1">
-          {[{ href: "/", label: "Home" }, ...LINKS].map((l, i) => (
+          {[{ href: "/", label: "Home" }, ...LINKS, signedIn ? { href: "/account", label: "Your account" } : { href: "/login", label: "Sign in" }].map((l, i) => (
             <li key={l.href} style={{ transitionDelay: open ? `${i * 30}ms` : "0ms" }} className={`transition-all duration-500 ${open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"}`}>
               <Link href={l.href} className="block py-2.5 text-[28px] font-semibold tracking-[-0.03em] text-ink">
                 {l.label}

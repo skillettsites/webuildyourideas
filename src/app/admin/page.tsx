@@ -5,6 +5,32 @@ import { CATEGORIES, categoryLabel } from "@/lib/config";
 import { formatLondon, roundNumber } from "@/lib/rounds";
 import { ADMIN_COOKIE, adminConfigured, isAdminSession } from "@/lib/security";
 import { sbRpc } from "@/lib/supabase";
+import { PLANS, planById } from "@/lib/plans";
+import { STATUS_LABEL, type RequestStatus } from "@/lib/clients";
+
+type QueueItem = {
+  id: string;
+  ref: number;
+  title: string;
+  status: RequestStatus;
+  updated_at: string;
+  client_name: string;
+  plan: string;
+  site_name: string | null;
+  attachments: number;
+  last_message: { author: string; body: string; created_at: string } | null;
+};
+type AdminClient = {
+  id: string;
+  email: string;
+  name: string;
+  company: string | null;
+  plan: string;
+  billing: string;
+  last_login_at: string | null;
+  open_requests: number;
+  sites: { id: string; name: string; url: string | null; repo: string | null; status: string }[];
+};
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
@@ -64,9 +90,11 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     );
   }
 
-  const [ideas, overview] = await Promise.all([
+  const [ideas, overview, queue, clients] = await Promise.all([
     sbRpc<AdminIdea[]>("wbyi_admin_ideas", { p_limit: 300 }).catch(() => [] as AdminIdea[]),
     sbRpc<Overview>("wbyi_admin_overview", {}).catch(() => null),
+    sbRpc<QueueItem[]>("wbyi_admin_requests", { p_statuses: ["new", "in_progress", "needs_info"] }).catch(() => [] as QueueItem[]),
+    sbRpc<AdminClient[]>("wbyi_admin_clients", {}).catch(() => [] as AdminClient[]),
   ]);
   const openLeads = overview?.leads.filter((l) => !l.handled) ?? [];
 
@@ -93,6 +121,85 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               <p className="mt-1 text-[28px] font-semibold tracking-[-0.03em]">{v}</p>
             </div>
           ))}
+        </div>
+
+        <h2 id="client-requests" className="title mt-12">
+          Client requests <span className="text-mute">({queue.length} open)</span>
+        </h2>
+        <div className="mt-4 space-y-2">
+          {queue.length === 0 && <p className="text-mute">No open client requests.</p>}
+          {queue.map((q) => (
+            <Link key={q.id} href={`/admin/requests/${q.id}`} className="flex items-center gap-4 rounded-[18px] bg-white p-4 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.2)]">
+              <span className="w-10 shrink-0 font-semibold tabular-nums text-mute">#{q.ref}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[15px] font-semibold text-ink">
+                  {q.plan === "priority" && <span className="mr-2 rounded-full bg-[#7d4cdb] px-2 py-0.5 text-[11px] font-semibold text-white">PRIORITY</span>}
+                  {q.title}
+                </span>
+                <span className="mt-0.5 block truncate text-[13px] text-mute">
+                  {q.client_name}
+                  {q.site_name ? ` · ${q.site_name}` : ""} · {STATUS_LABEL[q.status]} · {when(q.updated_at)}
+                  {q.attachments ? ` · ${q.attachments} files` : ""}
+                  {q.last_message ? ` · last: ${q.last_message.author === "client" ? "client" : "us"}` : ""}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        <h2 id="clients" className="title mt-12">
+          Clients
+        </h2>
+        <div className="mt-4 space-y-3">
+          {clients.map((c) => (
+            <div key={c.id} className="rounded-[18px] bg-white p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-[15px] font-semibold">
+                  {c.name}
+                  {c.company ? ` · ${c.company}` : ""} <span className="font-normal text-mute">· {planById(c.plan)?.name ?? c.plan} · {c.billing} · {c.open_requests} open</span>
+                </p>
+                <p className="text-[13px] text-mute">{c.last_login_at ? `Last signed in ${when(c.last_login_at)}` : "Never signed in"}</p>
+              </div>
+              <p className="mt-1 text-[13px] text-mute">{c.sites.map((s) => `${s.name}${s.url ? ` (${s.url})` : ""}`).join(" · ") || "No sites yet"}</p>
+              <div className="mt-3 grid gap-2 lg:grid-cols-2">
+                <form action="/api/admin/clients" method="post" className="flex gap-2">
+                  <input type="hidden" name="action" value="email" />
+                  <input type="hidden" name="client_id" value={c.id} />
+                  <input name="email" defaultValue={c.email} className="field !py-2 !text-[14px]" aria-label="Login email" />
+                  <button className="btn btn-secondary btn-sm shrink-0">Save email</button>
+                </form>
+                <form action="/api/admin/updates" method="post" className="flex gap-2">
+                  <input type="hidden" name="client_id" value={c.id} />
+                  <input type="hidden" name="site_id" value={c.sites[0]?.id ?? ""} />
+                  <input name="title" className="field !py-2 !text-[14px]" placeholder="Post to their Recent updates" aria-label="Update title" />
+                  <button className="btn btn-secondary btn-sm shrink-0">Post</button>
+                </form>
+              </div>
+            </div>
+          ))}
+          <form action="/api/admin/clients" method="post" className="grid gap-2 rounded-[18px] bg-white p-4 sm:grid-cols-3">
+            <p className="text-[15px] font-semibold sm:col-span-3">Add or update a client</p>
+            <input name="name" required className="field !py-2 !text-[14px]" placeholder="Name" />
+            <input name="email" required type="email" className="field !py-2 !text-[14px]" placeholder="Login email" />
+            <input name="company" className="field !py-2 !text-[14px]" placeholder="Company" />
+            <select name="plan" defaultValue="starter" className="field !py-2 !text-[14px]">
+              {PLANS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} (£{p.price})
+                </option>
+              ))}
+            </select>
+            <select name="billing" defaultValue="stripe" className="field !py-2 !text-[14px]">
+              <option value="stripe">Stripe</option>
+              <option value="invoice">Invoice</option>
+              <option value="complimentary">Complimentary</option>
+            </select>
+            <span />
+            <input name="site_name" className="field !py-2 !text-[14px]" placeholder="Site name (optional)" />
+            <input name="site_url" className="field !py-2 !text-[14px]" placeholder="https://site-url" />
+            <input name="site_repo" className="field !py-2 !text-[14px]" placeholder="GitHub repo (owner/name)" />
+            <button className="btn btn-primary btn-sm sm:col-span-3 sm:justify-self-start">Save client</button>
+          </form>
         </div>
 
         <h2 id="tiktok" className="title mt-12">
