@@ -166,7 +166,7 @@ export default async function HomePage() {
                 ))}
               </div>
             </StepTile>
-            <StepTile n={3} title="We build it." text="Voting closes on Sunday at 8pm. We design, build and launch the winner, free." delay={2}>
+            <StepTile n={3} title="We build it." text="Voting closes on Sunday at 8pm. We design, build and launch the winner, free. Any profits: 50% to you, 25% to us, 25% to charity." delay={2}>
               <div className="overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
                 <div className="flex items-center gap-1 bg-[#f6f6f8] px-3 py-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#ff5f57]" />

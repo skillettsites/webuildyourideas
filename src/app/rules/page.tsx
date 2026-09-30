@@ -12,7 +12,7 @@ export default function RulesPage() {
   return (
     <LegalPage
       title="Rules of the weekly build"
-      updated="28 September 2026"
+      updated="30 September 2026"
       intro="Short version: share an idea, gather votes, and if yours has the most when voting closes on Sunday at 8pm, we build it for you, free."
     >
       <h2>1. Who can take part</h2>
@@ -77,6 +77,7 @@ export default function RulesPage() {
         <li>Design, build and launch of that first version on the web, free of charge.</li>
         <li>A standard .com or .co.uk domain and hosting for the first 12 months, paid for by us.</li>
         <li>Ownership of the finished site and its code, which we hand over to you once it is launched.</li>
+        <li>A share of any profits it makes. Profits are split 50% to you, 25% to us and 25% to charity.</li>
       </ul>
       <p>
         The prize has no cash value and can’t be exchanged. If we don’t hear from the winner within 7 days of our email, we may pick the next idea in

@@ -14,7 +14,7 @@ export function GET() {
 - Ideas also come from comments on the We Build Your Ideas TikTok videos: the most-liked comments join the board and each TikTok like counts as one vote.
 - Voting closes every Sunday at 8pm UK time. Round 1 closes on Sunday 4 October 2026.
 - The idea with the highest score (votes on the site plus TikTok likes) wins.
-- The winner gets a focused first version designed, built and launched free, with a .com or .co.uk domain and hosting covered for the first year, and owns the finished site.
+- The winner gets a focused first version designed, built and launched free, with a .com or .co.uk domain and hosting covered for the first year, and owns the finished site. Any profits it makes are split 50% to the winner, 25% to We Build Your Ideas and 25% to charity.
 - Rules: ${SITE_URL}/rules
 - Past rounds: ${SITE_URL}/ideas/past
 - Everything built so far: ${SITE_URL}/built

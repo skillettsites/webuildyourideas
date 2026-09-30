@@ -11,7 +11,7 @@ export const HOME_FAQS: FaqItem[] = [
   },
   {
     q: "What does the winner get?",
-    a: "We plan a first version with you, then design, build and launch it on the web, free. We cover the domain name and hosting for the first year, and you’re credited as the person behind the idea.",
+    a: "We plan a first version with you, then design, build and launch it on the web, free. We cover the domain name and hosting for the first year, and you’re credited as the person behind the idea. Any profits it makes are split: 50% to you, 25% to us and 25% to charity.",
   },
   {
     q: "What kind of ideas can I share?",
